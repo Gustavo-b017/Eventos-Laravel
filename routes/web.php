@@ -1,27 +1,31 @@
-<!-- esta pagina e quem faz as rotas de tudo -->
 
 <?php
+// <!-- esta pagina e quem faz as rotas de tudo -->
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventControler;
 
-// estrutura padrao de criacao de rotas, que comeca e termina
+Route::get('/', [EventControler::class, 'index'] );
 
-Route::get('/', function () {
-    
-    $nome = 'Gustavo';
-    $idade = 18;
-    $arr = [13,28,23,44,545,653, 74];
-    $nomes = ['hislton', 'gustavo', 'joao', 'maria', 'jose', 'pedro', 'michel', 'gilmar'];
+Route::get('/event/creat', [EventControler::class, 'creat'] );
 
-
-
-    // o nome passado nas strings sao os que serao usados no view
-    // eles sao passados como array, e ligados com as respectivas variaveis
-    return view('welcome', 
-        [   'nome' => $nome,  
-            'idade' => $idade, 
-            'estudo' => 'programacao',
-            'arr' => $arr,
-            'nomes' => $nomes
-        ]);
+Route::get('/produtos', function () {
+    return view('produtos');
 });
+
+// precisa do id para acessar a pagina
+// Route::get('/produtos_solo/{id}', function ($id) {
+//     return view('produtoEspecifico', ['id' => $id]);
+// });
+
+// o id e opcional, se nao for passado, ele vai ser null, com uma pagina especifica
+Route::get('/produtos_solo/{id?}', function ($id = null) {
+    return view('produtoEspecifico', ['id' => $id]);
+});
+
+Route::get('/produtos', function () {
+       
+        $busca = request('search');
+        
+        return view('produtos', ['busca' => $busca]);
+    });
